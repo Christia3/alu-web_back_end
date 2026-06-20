@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """ Flask application """
 
+
 from flask import Flask, render_template, request
-from flask_babel import Babel, gettext
+from flask_babel import Babel
 
 
 class Config:
@@ -13,11 +14,7 @@ class Config:
 
 
 app = Flask(__name__)
-app.config.from_object(Config)
-
-# Make _ available to templates
-app.jinja_env.globals['_'] = gettext
-
+app.config.from_object("1-app.Config")
 babel = Babel(app)
 
 
@@ -30,8 +27,4 @@ def hello_world():
 @babel.localeselector
 def get_locale():
     """ Gets the best matching language for user """
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    return request.accept_languages.best_match(Config.LANGUAGES)
